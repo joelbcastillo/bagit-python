@@ -107,6 +107,7 @@ open_text_file = partial(codecs.open, encoding='utf-8', errors='strict')
 # This is the same as decoding the byte values in codecs.BOM:
 UNICODE_BYTE_ORDER_MARK = u'\uFEFF'
 
+
 def make_bag(bag_dir, bag_info=None, processes=1, checksums=None, checksum=None, encoding='utf-8'):
     """
     Convert a given directory into a bag. You can pass in arbitrary
@@ -180,7 +181,8 @@ def make_bag(bag_dir, bag_info=None, processes=1, checksums=None, checksum=None,
             if 'Bagging-Date' not in bag_info:
                 bag_info['Bagging-Date'] = date.strftime(date.today(), "%Y-%m-%d")
             if 'Bag-Software-Agent' not in bag_info:
-                bag_info['Bag-Software-Agent'] = 'bagit.py v' + VERSION + ' <http://github.com/libraryofcongress/bagit-python>'
+                bag_info[
+                    'Bag-Software-Agent'] = 'bagit.py v' + VERSION + ' <http://github.com/libraryofcongress/bagit-python>'
 
             bag_info['Payload-Oxum'] = "%s.%s" % (total_bytes, total_files)
             _make_tag_file('bag-info.txt', bag_info)
@@ -554,7 +556,7 @@ class Bag(object):
     def _validate_contents(self, processes=1, fast=False):
         if fast and not self.has_oxum():
             raise BagValidationError("cannot validate Bag with fast=True if Bag lacks a Payload-Oxum")
-        self._validate_oxum()    # Fast
+        self._validate_oxum()  # Fast
         if not fast:
             self._validate_entries(processes)  # *SLOW*
 
@@ -585,7 +587,9 @@ class Bag(object):
             total_files += 1
 
         if file_count != total_files or byte_count != total_bytes:
-            raise BagValidationError("Oxum error.  Found %s files and %s bytes on disk; expected %s files and %s bytes." % (total_files, total_bytes, file_count, byte_count))
+            raise BagValidationError(
+                "Oxum error.  Found %s files and %s bytes on disk; expected %s files and %s bytes." % (
+                total_files, total_bytes, file_count, byte_count))
 
     def _validate_entries(self, processes):
         """
@@ -715,7 +719,8 @@ class ChecksumMismatch(ManifestErrorDetail):
         self.found = found
 
     def __str__(self):
-        return "%s checksum validation failed (alg=%s expected=%s found=%s)" % (force_unicode(self.path), self.algorithm, self.expected, self.found)
+        return "%s checksum validation failed (alg=%s expected=%s found=%s)" % (
+        force_unicode(self.path), self.algorithm, self.expected, self.found)
 
 
 class FileMissing(ManifestErrorDetail):
@@ -1133,6 +1138,7 @@ if sys.version_info > (3, 0):
     force_unicode = str
 else:
     force_unicode = force_unicode_py2
+
 
 # following code is used for command line program
 
